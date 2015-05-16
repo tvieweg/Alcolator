@@ -14,9 +14,21 @@
 
 @implementation WhiskeyViewController
 
+- (instancetype) init {
+    self = [super init];
+    
+    if (self) {
+        self.title = NSLocalizedString(@"Whiskey", nil);
+        
+        // Since we don't have icons, move the title to the middle of the tab bar
+        [self.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -18)];
+    }
+    
+    return self;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Whiskey", @"whiskey"); 
 }
 
 - (void) calcAndUpdateAlcolator {

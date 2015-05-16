@@ -18,6 +18,19 @@
 
 @implementation ViewController
 
+- (instancetype) init {
+    self = [super init];
+    
+    if (self) {
+        self.title = NSLocalizedString(@"Wine", @"wine");
+        
+        // Since we don't have icons, move the title to the middle of the tab bar
+        [self.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -18)];
+    }
+    
+    return self;
+}
+
 //item sizing constants
 const int defaultFontSize = 10;
 const int defaultScreenWidth = 320;
@@ -87,10 +100,7 @@ const int relativeItemHeightFactor = 10;
     [self.hideKeyboardTapGestureRecognizer addTarget:self action:@selector(tapGestureDidFire:)];
     
     //Gets rid of the maximum number of lines on the label
-    self.resultLabel.numberOfLines = 0;
-    
-    //set title of view
-    self.title = NSLocalizedString(@"Wine", @"wine"); 
+    self.resultLabel.numberOfLines = 0;    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -160,6 +170,7 @@ const int relativeItemHeightFactor = 10;
     NSLog(@"Value of slider changed to %f", sender.value);
     [self.beerPercentTextField resignFirstResponder];
     [self calcAndUpdateAlcolator];
+    [self.tabBarItem setBadgeValue:[NSString stringWithFormat:@"%d", (int) sender.value]]; 
 
 }
 
