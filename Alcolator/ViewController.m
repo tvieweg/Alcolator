@@ -12,10 +12,15 @@
 
 @property (weak, nonatomic) UIButton *calculateButton;
 @property (weak, nonatomic) UIGestureRecognizer *hideKeyboardTapGestureRecognizer;
+@property (assign, nonatomic) CGFloat fontSize;
 
 @end
 
 @implementation ViewController
+
+const int defaultFontSize = 10;
+const int defaultScreenWidth = 320;
+const int relativeHeightPadding = 30; 
 
 - (void)loadView {
     
@@ -46,6 +51,10 @@
     self.calculateButton = button;
     self.hideKeyboardTapGestureRecognizer = tap;
     
+    //set font size based on device screen size.
+
+    
+    
     
     
 }
@@ -54,10 +63,11 @@
     [super viewDidLoad];
     
     //set primary view's background color to lightGrayColor
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor colorWithRed:(82/255.0) green:(180/255.0) blue:(180/255.0) alpha:1.0];
     
     //Tells the text field that 'self', this instance of ViewController should be treated as the text field's delegate.
     self.beerPercentTextField.delegate = self;
+    self.beerPercentTextField.backgroundColor = [UIColor whiteColor];
     
     //Set the placeholder text
     self.beerPercentTextField.placeholder = NSLocalizedString(@"% Alcohol Content Per Beer", @"Beer percent placeholder");
@@ -83,28 +93,49 @@
     self.resultLabel.numberOfLines = 0;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    _fontSize = defaultFontSize * self.view.frame.size.height / defaultScreenWidth;
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
     //set parameters for views based on iPhone 4 and 5 screen sizes.
-    CGFloat viewWidth = 320;
-    CGFloat padding = 20;
+    CGFloat viewWidth = self.view.frame.size.width;
+    CGFloat padding = self.view.frame.size.height / 30;
     CGFloat itemWidth = viewWidth - padding - padding;
-    CGFloat itemHeight = 44;
+    CGFloat itemHeight = self.view.frame.size.height / 10;
     
-    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
+    self.beerPercentTextField.frame = CGRectMake(padding, padding * 3, itemWidth, 16 * 2);
+    self.beerPercentTextField.font = [UIFont fontWithName:@"Arial" size: _fontSize];
+    self.beerPercentTextField.textAlignment = NSTextAlignmentCenter;
+    self.beerPercentTextField.layer.cornerRadius = 7;
     
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
-    self.numberOfBeersLabel.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
+    self.numberOfBeersLabel.frame = CGRectMake(padding, bottomOfTextField + padding * 3, itemWidth, itemHeight);
+    self.numberOfBeersLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
+    self.numberOfBeersLabel.textColor = [UIColor whiteColor];
+    self.numberOfBeersLabel.textAlignment = NSTextAlignmentCenter;
+    
     
     CGFloat bottomOfBeersLabel = CGRectGetMaxY(self.numberOfBeersLabel.frame);
     self.beerCountSlider.frame = CGRectMake(padding, bottomOfBeersLabel + padding, itemWidth, itemHeight);
+
     
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
-    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 4);
+    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
+    self.resultLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
+    self.resultLabel.textColor = [UIColor whiteColor];
+    self.resultLabel.textAlignment = NSTextAlignmentCenter;
+
+
     
     CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
     self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
+    self.calculateButton.backgroundColor = [UIColor whiteColor];
+    self.calculateButton.titleLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
+    self.calculateButton.layer.cornerRadius = 7;
+
     
     
 }
