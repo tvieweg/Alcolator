@@ -18,9 +18,11 @@
 
 @implementation ViewController
 
+//item sizing constants
 const int defaultFontSize = 10;
 const int defaultScreenWidth = 320;
-const int relativeHeightPadding = 30; 
+const int relativeHeightPaddingFactor = 30;
+const int relativeItemHeightFactor = 10;
 
 - (void)loadView {
     
@@ -50,26 +52,18 @@ const int relativeHeightPadding = 30;
     self.numberOfBeersLabel = numberLabel;
     self.calculateButton = button;
     self.hideKeyboardTapGestureRecognizer = tap;
-    
-    //set font size based on device screen size.
-
-    
-    
-    
-    
+   
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //set primary view's background color to lightGrayColor
+    //set primary view's background color to teal.
     self.view.backgroundColor = [UIColor colorWithRed:(82/255.0) green:(180/255.0) blue:(180/255.0) alpha:1.0];
     
-    //Tells the text field that 'self', this instance of ViewController should be treated as the text field's delegate.
+    //Setup beer ABV text field.
     self.beerPercentTextField.delegate = self;
     self.beerPercentTextField.backgroundColor = [UIColor whiteColor];
-    
-    //Set the placeholder text
     self.beerPercentTextField.placeholder = NSLocalizedString(@"% Alcohol Content Per Beer", @"Beer percent placeholder");
     
     //Tells 'self.beerCountSlider' that when its value changes, it should call '[self sliderValueDidChange:]'.
@@ -94,6 +88,8 @@ const int relativeHeightPadding = 30;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    //determine screen size and adjust font based on the overall size.
     _fontSize = defaultFontSize * self.view.frame.size.height / defaultScreenWidth;
 }
 
@@ -102,42 +98,41 @@ const int relativeHeightPadding = 30;
     
     //set parameters for views based on iPhone 4 and 5 screen sizes.
     CGFloat viewWidth = self.view.frame.size.width;
-    CGFloat padding = self.view.frame.size.height / 30;
+    CGFloat padding = self.view.frame.size.height / relativeHeightPaddingFactor;
     CGFloat itemWidth = viewWidth - padding - padding;
-    CGFloat itemHeight = self.view.frame.size.height / 10;
+    CGFloat itemHeight = self.view.frame.size.height / relativeItemHeightFactor;
     
-    self.beerPercentTextField.frame = CGRectMake(padding, padding * 3, itemWidth, 16 * 2);
+    //set parameters for text field
+    self.beerPercentTextField.frame = CGRectMake(padding, padding * 3, itemWidth, _fontSize * 2);
     self.beerPercentTextField.font = [UIFont fontWithName:@"Arial" size: _fontSize];
     self.beerPercentTextField.textAlignment = NSTextAlignmentCenter;
     self.beerPercentTextField.layer.cornerRadius = 7;
     
+    //set parameters for number of beers label
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
     self.numberOfBeersLabel.frame = CGRectMake(padding, bottomOfTextField + padding * 3, itemWidth, itemHeight);
     self.numberOfBeersLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
     self.numberOfBeersLabel.textColor = [UIColor whiteColor];
     self.numberOfBeersLabel.textAlignment = NSTextAlignmentCenter;
     
-    
+    //set parameters for slider
     CGFloat bottomOfBeersLabel = CGRectGetMaxY(self.numberOfBeersLabel.frame);
     self.beerCountSlider.frame = CGRectMake(padding, bottomOfBeersLabel + padding, itemWidth, itemHeight);
 
-    
+    //set parameters for results label
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
     self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
     self.resultLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
     self.resultLabel.textColor = [UIColor whiteColor];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
-
-
     
+    //set parameters for calculate button
     CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
     self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
     self.calculateButton.backgroundColor = [UIColor whiteColor];
     self.calculateButton.titleLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
     self.calculateButton.layer.cornerRadius = 7;
 
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -148,20 +143,17 @@ const int relativeHeightPadding = 30;
 - (void)textFieldDidChange:(UITextField *)sender {
     
     NSString *enteredText = sender.text;
-    
     float enteredNumber = [enteredText floatValue];
     
     if (enteredNumber == 0) {
         sender.text = nil;
     }
-    
 }
 
 - (void)sliderDidChange:(UISlider *)sender {
     NSLog(@"Value of slider changed to %f", sender.value);
     [self.beerPercentTextField resignFirstResponder];
-    [self calcAndUpdateAlcolator]; 
-    
+    [self calcAndUpdateAlcolator];
 }
 
 
@@ -169,8 +161,6 @@ const int relativeHeightPadding = 30;
     
     [self.beerPercentTextField resignFirstResponder];
     [self calcAndUpdateAlcolator];
-    
-
 }
 
 - (void)tapGestureDidFire:(UITapGestureRecognizer *)sender {
@@ -179,23 +169,23 @@ const int relativeHeightPadding = 30;
 
 - (void) calcAndUpdateAlcolator {
     
+    //alcohol constants
+    const int ouncesInBeerGlass = 12;
+    const float ouncesInOneWineGlass = 5;
+    const float alcoholPercentageOfWine = 0.13;
+    
     //Beer calculation
     int numberOfBeers = self.beerCountSlider.value;
-    int ouncesInBeerGlass = 12;
     
     float alcoholPercentageOfBeer = [self.beerPercentTextField.text floatValue] / 100;
     float ouncesOfAlcoholPerBeer = alcoholPercentageOfBeer * ouncesInBeerGlass;
     float ouncesOfAlcoholTotal = numberOfBeers * ouncesOfAlcoholPerBeer;
     
     //Wine calculation
-    float ouncesInOneWineGlass = 5;
-    float alcoholPercentageOfWine = 0.13;
-    
     float ouncesOfAlcoholPerWineGlass = ouncesInOneWineGlass * alcoholPercentageOfWine;
     float numberOfWineGlassesForEquivalentAlcoholAmount = ouncesOfAlcoholTotal / ouncesOfAlcoholPerWineGlass;
     
     //Decide to use plural or singluar
-    
     NSString *beerText;
     
     if (numberOfBeers == 1) {

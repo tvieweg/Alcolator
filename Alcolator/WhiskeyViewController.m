@@ -16,23 +16,23 @@
 
 - (void) calcAndUpdateAlcolator {
     
+    //Alcohol constants
+    const int ouncesInBeerGlass = 12;
+    const float ouncesInOneWhiskeyGlass = 5;
+    const float alcoholPercentageOfWhiskey = 0.13;
+    
     //Beer calculation
     int numberOfBeers = self.beerCountSlider.value;
-    int ouncesInBeerGlass = 12;
-    
+
     float alcoholPercentageOfBeer = [self.beerPercentTextField.text floatValue] / 100;
     float ouncesOfAlcoholPerBeer = alcoholPercentageOfBeer * ouncesInBeerGlass;
     float ouncesOfAlcoholTotal = numberOfBeers * ouncesOfAlcoholPerBeer;
     
-    //Wine calculation
-    float ouncesInOneWineGlass = 5;
-    float alcoholPercentageOfWine = 0.13;
-    
-    float ouncesOfAlcoholPerWineGlass = ouncesInOneWineGlass * alcoholPercentageOfWine;
-    float numberOfWineGlassesForEquivalentAlcoholAmount = ouncesOfAlcoholTotal / ouncesOfAlcoholPerWineGlass;
+    //Whiskey calculation
+    float ouncesOfAlcoholPerWhiskeyGlass = ouncesInOneWhiskeyGlass * alcoholPercentageOfWhiskey;
+    float numberOfWhiskeyGlassesForEquivalentAlcoholAmount = ouncesOfAlcoholTotal / ouncesOfAlcoholPerWhiskeyGlass;
     
     //Decide to use plural or singluar
-    
     NSString *beerText;
     
     if (numberOfBeers == 1) {
@@ -41,12 +41,12 @@
         beerText = NSLocalizedString(@"beers", @"plural of beer");
     }
     
-    NSString *wineText;
+    NSString *WhiskeyText;
     
-    if (numberOfWineGlassesForEquivalentAlcoholAmount == 1) {
-        wineText = NSLocalizedString(@"shot", @"singular of shot");
+    if (numberOfWhiskeyGlassesForEquivalentAlcoholAmount == 1) {
+        WhiskeyText = NSLocalizedString(@"shot", @"singular of shot");
     } else {
-        wineText = NSLocalizedString(@"shots", @"plural of shot");
+        WhiskeyText = NSLocalizedString(@"shots", @"plural of shot");
     }
     
     //update labels
@@ -54,7 +54,7 @@
     
     //if no alcohol percentage has been entered, keep instructions in results label.
     if (alcoholPercentageOfBeer != 0) {
-        NSString *resultText = [NSString stringWithFormat:@"%d %@ contains as much alcohol as %.1f %@ of whiskey", numberOfBeers, beerText, numberOfWineGlassesForEquivalentAlcoholAmount, wineText];
+        NSString *resultText = [NSString stringWithFormat:@"%d %@ contains as much alcohol as %.1f %@ of whiskey", numberOfBeers, beerText, numberOfWhiskeyGlassesForEquivalentAlcoholAmount, WhiskeyText];
         
         self.resultLabel.text = resultText;
     }
