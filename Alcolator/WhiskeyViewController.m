@@ -14,12 +14,17 @@
 
 @implementation WhiskeyViewController
 
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Whiskey", @"whiskey"); 
+}
+
 - (void) calcAndUpdateAlcolator {
     
     //Alcohol constants
     const int ouncesInBeerGlass = 12;
-    const float ouncesInOneWhiskeyGlass = 5;
-    const float alcoholPercentageOfWhiskey = 0.13;
+    const float ouncesInOneWhiskeyGlass = 1;
+    const float alcoholPercentageOfWhiskey = 0.4;
     
     //Beer calculation
     int numberOfBeers = self.beerCountSlider.value;
@@ -41,12 +46,12 @@
         beerText = NSLocalizedString(@"beers", @"plural of beer");
     }
     
-    NSString *WhiskeyText;
+    NSString *whiskeyText;
     
     if (numberOfWhiskeyGlassesForEquivalentAlcoholAmount == 1) {
-        WhiskeyText = NSLocalizedString(@"shot", @"singular of shot");
+        whiskeyText = NSLocalizedString(@"shot", @"singular of shot");
     } else {
-        WhiskeyText = NSLocalizedString(@"shots", @"plural of shot");
+        whiskeyText = NSLocalizedString(@"shots", @"plural of shot");
     }
     
     //update labels
@@ -54,9 +59,12 @@
     
     //if no alcohol percentage has been entered, keep instructions in results label.
     if (alcoholPercentageOfBeer != 0) {
-        NSString *resultText = [NSString stringWithFormat:@"%d %@ contains as much alcohol as %.1f %@ of whiskey", numberOfBeers, beerText, numberOfWhiskeyGlassesForEquivalentAlcoholAmount, WhiskeyText];
+        NSString *resultText = [NSString stringWithFormat:@"%d %@ contains as much alcohol as %.1f %@ of whiskey", numberOfBeers, beerText, numberOfWhiskeyGlassesForEquivalentAlcoholAmount, whiskeyText];
         
         self.resultLabel.text = resultText;
+        
+        self.title = [NSString stringWithFormat:@"Wine (%.1f %@)", numberOfWhiskeyGlassesForEquivalentAlcoholAmount, whiskeyText];
+
     }
 }
 

@@ -52,6 +52,9 @@ const int relativeItemHeightFactor = 10;
     self.numberOfBeersLabel = numberLabel;
     self.calculateButton = button;
     self.hideKeyboardTapGestureRecognizer = tap;
+    
+    //set result label to list instructions
+    self.resultLabel.text = NSLocalizedString(@"Enter a percentage and press calculate or move slider to see equivalent drinks", @"User instructions");
    
 }
 
@@ -85,6 +88,9 @@ const int relativeItemHeightFactor = 10;
     
     //Gets rid of the maximum number of lines on the label
     self.resultLabel.numberOfLines = 0;
+    
+    //set title of view
+    self.title = NSLocalizedString(@"Wine", @"wine"); 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -103,7 +109,7 @@ const int relativeItemHeightFactor = 10;
     CGFloat itemHeight = self.view.frame.size.height / relativeItemHeightFactor;
     
     //set parameters for text field
-    self.beerPercentTextField.frame = CGRectMake(padding, padding * 3, itemWidth, _fontSize * 2);
+    self.beerPercentTextField.frame = CGRectMake(padding, padding * 4, itemWidth, _fontSize * 2);
     self.beerPercentTextField.font = [UIFont fontWithName:@"Arial" size: _fontSize];
     self.beerPercentTextField.textAlignment = NSTextAlignmentCenter;
     self.beerPercentTextField.layer.cornerRadius = 7;
@@ -121,7 +127,7 @@ const int relativeItemHeightFactor = 10;
 
     //set parameters for results label
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
-    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
+    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding - 10, itemWidth, itemHeight * 3);
     self.resultLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
     self.resultLabel.textColor = [UIColor whiteColor];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
@@ -154,6 +160,7 @@ const int relativeItemHeightFactor = 10;
     NSLog(@"Value of slider changed to %f", sender.value);
     [self.beerPercentTextField resignFirstResponder];
     [self calcAndUpdateAlcolator];
+
 }
 
 
@@ -210,6 +217,8 @@ const int relativeItemHeightFactor = 10;
         NSString *resultText = [NSString stringWithFormat:@"%d %@ contains as much alcohol as %.1f %@ of wine", numberOfBeers, beerText, numberOfWineGlassesForEquivalentAlcoholAmount, wineText];
         
         self.resultLabel.text = resultText;
+        
+        self.title = [NSString stringWithFormat:@"Wine (%.1f %@)", numberOfWineGlassesForEquivalentAlcoholAmount, wineText];
     }
 }
 
