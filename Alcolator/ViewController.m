@@ -109,7 +109,7 @@ const int relativeItemHeightFactor = 10;
     CGFloat itemHeight = self.view.frame.size.height / relativeItemHeightFactor;
     
     //set parameters for text field
-    self.beerPercentTextField.frame = CGRectMake(padding, padding * 3, itemWidth, _fontSize * 2);
+    self.beerPercentTextField.frame = CGRectMake(padding, padding * 4, itemWidth, _fontSize * 2);
     self.beerPercentTextField.font = [UIFont fontWithName:@"Arial" size: _fontSize];
     self.beerPercentTextField.textAlignment = NSTextAlignmentCenter;
     self.beerPercentTextField.layer.cornerRadius = 7;
@@ -127,7 +127,7 @@ const int relativeItemHeightFactor = 10;
 
     //set parameters for results label
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
-    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
+    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding - 10, itemWidth, itemHeight * 3);
     self.resultLabel.font = [UIFont fontWithName:@"Arial" size:_fontSize];
     self.resultLabel.textColor = [UIColor whiteColor];
     self.resultLabel.textAlignment = NSTextAlignmentCenter;
